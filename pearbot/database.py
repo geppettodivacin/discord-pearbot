@@ -23,10 +23,12 @@ class Transaction(object):
         self.connection = connection
 
     def register_user(self, user, guild):
-        self.connection.execute('INSERT INTO Users VALUES (?, ?)', (user, guild))
+        cursor = self.connection.cursor()
+        cursor.execute('INSERT INTO Users VALUES (?, ?)', (user, guild))
 
     def users(self):
-        return self.connection.execute('SELECT * FROM Users').fetchall()
+        cursor = self.connection.cursor()
+        return cursor.execute('SELECT * FROM Users').fetchall()
 
 class TransactionManager(object):
     def __init__(self, connection):
