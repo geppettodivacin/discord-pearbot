@@ -16,15 +16,26 @@ def create_bot(connection, *args, **kwargs):
     @bot.command()
     async def register(ctx):
         with connection.transaction() as t:
-            t.register_user(ctx.author.name, ctx.guild.id)
+            try:
+                t.register_user(ctx.author.name, ctx.guild.id)
+            except:
+                await ctx.send(f'User {ctx.author.name} was already registered')
+                return
+
             await ctx.send(f'User {ctx.author.name} registered')
 
     @bot.command()
     async def users(ctx):
         with connection.transaction() as t:
-            cursor = t.users ()
+            cursor = t.users(ctx.guild.id)
+            rows = cursor.fetchall()
+
+            if not rows:
+                await ctx.send('I have no users in my database!')
+                return
+
             to_line = lambda row: ', '.join([str(col) for col in row])
-            lines = map(to_line, cursor)
+            lines = map(to_line, rows)
             await ctx.send('\n'.join(lines))
 
     return bot

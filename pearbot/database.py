@@ -26,9 +26,9 @@ class Transaction(object):
         cursor = self.connection.cursor()
         cursor.execute('INSERT INTO Users VALUES (?, ?)', (user, guild))
 
-    def users(self):
+    def users(self, guild):
         cursor = self.connection.cursor()
-        return cursor.execute('SELECT * FROM Users').fetchall()
+        return cursor.execute('SELECT * FROM Users WHERE Guild=?', (guild,))
 
 class TransactionManager(object):
     def __init__(self, connection):
