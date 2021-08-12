@@ -17,7 +17,7 @@ def create_bot(connection, *args, **kwargs):
     async def register(ctx):
         with connection.transaction() as t:
             try:
-                t.register_user(ctx.author.name, ctx.guild.id)
+                t.register_user(str(ctx.author), ctx.guild.id)
             except:
                 await ctx.send(f'User {ctx.author.name} was already registered')
                 return
@@ -37,5 +37,22 @@ def create_bot(connection, *args, **kwargs):
             to_line = lambda row: ', '.join([str(col) for col in row])
             lines = map(to_line, rows)
             await ctx.send('\n'.join(lines))
+
+    @bot.command()
+    async def roles(ctx):
+        members = ctx.message.mentions
+
+        if not members:
+            members = [ctx.author]
+
+        member_roles = \
+            [(member, map(lambda r: r.name, member.roles[1:]))
+                for member in members]
+        replies = \
+            [f'Member {member.mention} has roles: {", ".join(roles)}'
+                for (member, roles) in member_roles]
+
+        for reply in replies:
+            await ctx.send(reply)
 
     return bot
