@@ -1,0 +1,5 @@
+[_] create a !pair command, accessible only to mods and admins, which makes a round of pairings
+[_] add a pairings table to say who's paired with whom
+[_] make the users table more robust with user ids... right now if we've got it running on multiple servers, it will fail
+[_] stop using a temporary in-memory database and start using a file passed in as a command-line flag or environment variable
+[_] profit
