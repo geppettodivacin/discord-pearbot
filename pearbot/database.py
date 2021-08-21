@@ -1,8 +1,11 @@
 import sqlite3
+from collections import namedtuple
 
 _tables = [
-    ('Users', ['Name STRING PRIMARY KEY', 'Guild BIGINT'])
+    ('Users', ['Id STRING PRIMARY KEY', 'Guild BIGINT'])
 ]
+
+User = namedtuple('User', ['id', 'guild'])
 
 class Connection(object):
     def __init__(self, connection):
@@ -28,7 +31,14 @@ class Transaction(object):
 
     def users(self, guild):
         cursor = self.connection.cursor()
-        return cursor.execute('SELECT * FROM Users WHERE Guild=?', (guild,))
+        cursor.execute('SELECT * FROM Users WHERE Guild=?', (guild,))
+        return map(User._make, cursor.fetchall())
+
+    def unpaired_users(self, guild):
+        cursor = self.connection.cursor()
+        # TODO: Add a joined query to the pairing table
+        cursor.execute('SELECT * FROM Users WHERE Guild=?', (guild,))
+        return map(User._make, cursor.fetchall())
 
 class TransactionManager(object):
     def __init__(self, connection):
