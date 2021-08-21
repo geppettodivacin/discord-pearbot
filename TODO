@@ -3,3 +3,7 @@
 - [ ] make the users table more robust with user ids... right now if we've got it running on multiple servers, it will fail
 - [ ] stop using a temporary in-memory database and start using a file passed in as a command-line flag or environment variable
 - [ ] profit
+
+### Known edge cases
+- [ ] Are we trying for "match the most interests" or "make one matching per interest" or "match one random interest?"
+- [ ] If there's an odd number of people, do we just match three?
